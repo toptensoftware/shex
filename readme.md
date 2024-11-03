@@ -144,7 +144,7 @@ enables "nothrow" to prevent throwing on non-zero status
 * `stdin` - the child process's `stdin` stream
 * `stdout` - the child process's `stdout` stream
 * `stderr` - the child process's `stderr` stream
-* `pipe()` - pipe's the child process's `stdout` to either another stream,
+* `pipe()` - pipes the child process's `stdout` to either another stream,
 or the stdin of a another ProcessPromise
 
 
