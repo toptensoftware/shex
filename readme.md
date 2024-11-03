@@ -3,7 +3,8 @@
 A library for writing shell scripts in NodeJS.
 
 Based on an earlier library for spawning child processes but
-with a new API inspired by ZX's use of template literal functions.
+with a new API inspired by [ZX's](https://google.github.io/zx/) use 
+of template literal functions.
 
 ## Installation
 
@@ -11,9 +12,8 @@ with a new API inspired by ZX's use of template literal functions.
 
 ## Usage
 
-All commands are executed by a shex "context" that manages
+All commands are executed by a "shex context" that controls
 how the child process is spawned.
-
 
 ```js
 // Import
@@ -54,7 +54,7 @@ The following context options are available:
 * `async` - true for async operation, false for sync
 * `env` - environment vars to be merged over `process.env` for spawned processes
 * `cwd` - working directory for spawned processes
-* `ignoreStatus` - if true, non-zero status (exit) codes from spawned processes won't throw exceptions
+* `nothrow` - if true, non-zero status (exit) codes from spawned processes won't throw exceptions
 * `encoding` - encoding to be used on stdio streams of spawned processes
 * `stdio` - default stdio configuration for spawned processes
 * `input` - input to be sent to the child process's stdin
@@ -94,6 +94,8 @@ Both `.push` and `.set` accept a string as a new current directory
 $.push("./subdir")
 ```
 
+## Creating New Contexts
+
 You can also create a new context based on an existing one:
 
 ```js
@@ -125,10 +127,10 @@ The result of a spawned process is returned immediately from
 a sync context, or promised by an async context and has the 
 following properies:
 
-`status` - the status (exit code) of the child process
-`stdout` - the stdout output of the child process
-`stderr` - the stderr output of the child process
-`signal` - the signal returned by the child process
+* `status` - the status (exit code) of the child process
+* `stdout` - the stdout output of the child process
+* `stderr` - the stderr output of the child process
+* `signal` - the signal returned by the child process
 
 
 
@@ -137,12 +139,12 @@ following properies:
 In async mode, a ProcessPromise is returned when a child
 process is spawned.  It has the following members:
 
-`status` - returns a promise for the process exit status code and 
-enables "ignoreStatus" to prevent throwing on non-zero status
-`stdin` - the child process's `stdin` stream
-`stdout` - the child process's `stdout` stream
-`stderr` - the child process's `stderr` stream
-`pipe()` - pipe's the child process's `stdout` to either another stream,
+* `status` - returns a promise for the process exit status code and 
+enables "nothrow" to prevent throwing on non-zero status
+* `stdin` - the child process's `stdin` stream
+* `stdout` - the child process's `stdout` stream
+* `stderr` - the child process's `stderr` stream
+* `pipe()` - pipe's the child process's `stdout` to either another stream,
 or the stdin of a another ProcessPromise
 
 
@@ -151,18 +153,19 @@ or the stdin of a another ProcessPromise
 The shex context object makes the following libraries and helpers
 available:
 
-`$.os` - the node `os` module
-`$.fetch` - the `node-fetch-native` package
-`$.sleep(period)` - a promisified wrapper around setTimeout
-`$.chalk` - the `chalk` package
-`$.raw` - marks a string as "raw" so it's not escaped/wrapped when used
+* `$.os` - the node `os` module
+* `$.fetch` - the `node-fetch-native` package
+* `$.sleep(period)` - a promisified wrapper around setTimeout
+* `$.chalk` - the [`chalk`](https://github.com/chalk/chalk#readme) package
+* `$.raw` - marks a string as "raw" so it's not escaped/wrapped when used
 as a process argument.
-`$.stdin` - reads the current process `stdin` as a string (use await 
+* `$.stdin` - reads the current process `stdin` as a string (use await 
 when in async mode)
-`$.fs` - either the sync or async version (depending on context async 
-setting) of node's `fs` package merged with the `fs-extra` package.
-`$.path` - either the node `path` or `path.posix` package (ie: a version
+* `$.fs` - either the sync or async version (depending on context async 
+setting) of node's `fs` package merged with the [`fs-extra`](https://github.com/jprichardson/node-fs-extra) package.
+* `$.path` - either the node `path` or `path.posix` package (ie: a version
 that uses backslash mode that matches the current shell)
-`$.glob` - either the `globby` or `globbySync` functions from the `globby`
+* `$.glob` - either the `globby` or `globbySync` functions from the [`globby`](https://github.com/sindresorhus/globby#readme)
 package.  If using Windows command shell, will also convert backslashes to 
 slashes and back.
+* `$.which` - either the sync or async version of the [`which`](https://github.com/npm/node-which#readme) package.

@@ -25,7 +25,7 @@ export class ProcessPromise extends Promise
         this.#ctx = execOrContext;
 
         // Setup ignore status flag
-        this.#ignoreStatus = this.#ctx.options.ignoreStatus;
+        this.#nothrow = this.#ctx.options.nothrow;
         
         // Delay execution until next tick so
         // client can adjust pipe, exit code etc...
@@ -36,7 +36,7 @@ export class ProcessPromise extends Promise
     #resolve;
     #reject;
     #child;
-    #ignoreStatus;
+    #nothrow;
     #result = {
         status: null,
         stdout: "",
@@ -57,7 +57,7 @@ export class ProcessPromise extends Promise
         this.#child.on("exit", (status, signal) => {
             this.#result.status = status;
             this.#result.signal = signal;
-            if (!this.#ignoreStatus && status)
+            if (!this.#nothrow && status)
             {
                 this.#reject(new Error(`command exited with non-zero status code (${status})`));
             }
@@ -89,7 +89,7 @@ export class ProcessPromise extends Promise
 
     get status()
     {
-        this.#ignoreStatus = true;
+        this.#nothrow = true;
         return new Promise((resolve, reject) => {
             this
                 .then((r) => resolve(r.status))

@@ -10,6 +10,7 @@ import { stdin as input, stdout as output } from 'node:process';
 import fetch from "node-fetch-native";
 import chalk from "chalk";
 import { globby, globbySync } from "globby";
+import which from "which";
 
 import { ProcessPromise } from "./ProcessPromise.js";
 import { RawString } from "./RawString.js";
@@ -163,7 +164,7 @@ export default function shex(options)
                 throw map_error(r.error, opts);
 
             // Status erros only throw if !disabled
-            if (!options.ignoreStatus)
+            if (!options.nothrow)
             {
                 if (r.status)
                     throw new Error(`command exited with non-zero status code (${r.status})`);
@@ -317,6 +318,13 @@ export default function shex(options)
         get() 
         {
             return options.async ? fs_async : fs_sync;
+        }
+    });
+
+    Object.defineProperty(shex, "which", {
+        get() 
+        {
+            return options.async ? which : which.sync;
         }
     });
 
