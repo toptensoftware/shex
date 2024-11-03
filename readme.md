@@ -30,7 +30,7 @@ console.log(result.stdout);
 Sync mode
 
 ```js
-// Create an async bash context
+// Create a sync bash context
 let $ = shex({ async: false, shell: "bash" });
 
 // Run commands
@@ -50,14 +50,14 @@ let $ = shex({ shell: false });
 
 The following context options are available:
 
-* `shell` - the shell to use, or false
-* `async` - true for async operation, false for sync
-* `env` - environment vars to be merged over `process.env` for spawned processes
-* `cwd` - working directory for spawned processes
-* `nothrow` - if true, non-zero status (exit) codes from spawned processes won't throw exceptions
-* `encoding` - encoding to be used on stdio streams of spawned processes
-* `stdio` - default stdio configuration for spawned processes
-* `input` - input to be sent to the child process's stdin
+* `shell` - the shell to use, or false (default undefined = false)
+* `async` - true for async operation, false for sync (default undefined = false)
+* `env` - environment vars to be merged over `process.env` for spawned processes (default `{}`)
+* `cwd` - working directory for spawned processes (default undefined)
+* `nothrow` - if true, non-zero status (exit) codes from spawned processes won't throw exceptions (default undefined = false)
+* `encoding` - encoding to be used on stdio streams of spawned processes (default: "utf8")
+* `stdio` - default stdio configuration for spawned processes (default undefined = ['inherit', 'pipe', 'pipe'])
+* `input` - input to be sent to the child process's stdin (default undefined)
 
 
 ## Modifying an Existing Context
